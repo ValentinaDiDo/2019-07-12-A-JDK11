@@ -72,6 +72,7 @@ public class FoodController {
     		
     		this.grafo = this.model.getGrafo();
     		List<Food> food = new ArrayList<>(this.grafo.vertexSet());
+    		Collections.sort(food);
     		this.boxFood.getItems().clear();
     		this.boxFood.getItems().addAll(food);
     		

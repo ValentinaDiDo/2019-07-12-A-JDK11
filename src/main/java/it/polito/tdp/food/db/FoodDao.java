@@ -118,7 +118,7 @@ public class FoodDao {
 				+ "FROM food f, portion p "
 				+ "WHERE f.food_code= p.food_code "
 				+ "group by f.food_code, f.display_name "
-				+ "having count(*) > ?";
+				+ "having count(*) <= ?";
 		List<Food> list = new ArrayList<>() ;
 		
 		try {
