@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.polito.tdp.food.model.Adiacenza;
+import it.polito.tdp.food.model.CibiConnessi;
 import it.polito.tdp.food.model.Condiment;
 import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Portion;
@@ -234,7 +235,48 @@ public class FoodDao {
 	
 	}
 	
-	
+	public List<CibiConnessi> getCibiConnessi(Food f, Map<Integer, Food> mFood){
+		String sql = "SELECT f2.food_code as f2,  AVG(c.condiment_calories) as calorie "
+				+ "FROM food f1, food f2, food_condiment fd1, food_condiment fd2, condiment c "
+				+ "WHERE f1.food_code > f2.food_code "
+				+ "		AND f1.food_code = fd1.food_code AND f2.food_code = fd2.food_code "
+				+ "		AND fd1.condiment_code = fd2.condiment_code "
+				+ "		AND fd1.condiment_code = c.condiment_code "
+				+ "		AND f1.food_code = ? "
+				+ "GROUP BY  f2.food_code ";
+		List<CibiConnessi> result = new ArrayList<>();
+		
+		try {
+			Connection conn = DBConnect.getConnection() ;
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			st.setInt(1, f.getFood_code());
+			ResultSet res = st.executeQuery() ;
+			
+			while(res.next()) {
+				try {
+					
+					//aggiungere cibo 
+					if( mFood.containsKey(res.getInt("f2"))) {
+						
+						Food f2 = mFood.get(res.getInt("f2"));
+						double calorie = res.getDouble("calorie");
+						CibiConnessi c = new CibiConnessi(f2, calorie);
+						result.add(c);						
+					}
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
 	
 	
 }

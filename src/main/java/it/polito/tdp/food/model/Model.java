@@ -1,5 +1,6 @@
 package it.polito.tdp.food.model;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,5 +46,9 @@ public class Model {
 	public List<Adiacenza> getAdiacenzeCalorieCongiunte(Food f){
 		return this.dao.getAdiacenzeCalorieCongiunte(f, this.mFood);
 	}
-	
+	public List<CibiConnessi> getCibiConnessi(Food f){
+		List<CibiConnessi> connessi = this.dao.getCibiConnessi(f, mFood);
+		Collections.sort(connessi);
+		return connessi;
+	}
 }

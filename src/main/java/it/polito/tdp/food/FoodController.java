@@ -18,6 +18,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import it.polito.tdp.food.model.Adiacenza;
 import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Model;
+import it.polito.tdp.food.model.Simulatore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -93,6 +94,8 @@ public class FoodController {
     	
     	if(!this.grafoCreato) {
     		txtResult.setText("devi prima creare il grafo\n");
+    		
+    		
     	}else {
     		Food scelto = this.boxFood.getValue();
     		if(scelto== null) {
@@ -130,6 +133,20 @@ public class FoodController {
     void doSimula(ActionEvent event) {
     	txtResult.clear();
     	txtResult.appendText("Simulazione...");
+    	
+    	if(this.grafoCreato) {
+    		Food scelto = this.boxFood.getValue();
+    		String n = txtK.getText();
+    		int k = Integer.parseInt(n);
+    		Simulatore simulatore = new Simulatore(grafo, scelto, k);
+    		simulatore.inizializza();
+    		simulatore.run();
+    		
+    		int totCibi = simulatore.getTotCibi();
+    		double durata = simulatore.getDurata();
+    		
+    		txtResult.setText("NUMERO CIBI: "+totCibi+"\nDURATA : "+durata+" minuti");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
